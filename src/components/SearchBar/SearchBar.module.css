@@ -1,0 +1,34 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgb(22, 22, 75);
+  margin: auto;
+  min-height: 70px;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #333131;
+  width: 300px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 15px;
+}
+
+button:hover,
+button:focus {
+  background-color: #90b0d1;
+}
