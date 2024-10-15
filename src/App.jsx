@@ -3,7 +3,9 @@ import axios from "axios";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import ImageModal from "./components/ImageModal/ImageModal";
-import { Audio } from "react-loader-spinner";
+import Loader from "./components/Loader/Loader";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 
 const ACCESS_KEY = "GGoLKrCfHWvuuI6gwWjajCwLwCfOwRPHt82Scg1HB2I";
 const BASE_URL = "https://api.unsplash.com/search/photos";
@@ -61,10 +63,6 @@ function App() {
     setPage(1);
   };
 
-  const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
-  };
-
   const openModal = (image) => {
     setSelectedImage(image);
     setIsModalOpen(true);
@@ -78,55 +76,22 @@ function App() {
   return (
     <>
       <SearchBar onSubmit={handleSearch} />
-
-      {error && <p>Oops... Something went wrong: {error.message}</p>}
-
-      {!error && (
-        <>
-          {loading && page === 1 ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100vh",
-              }}
-            >
-              <Audio
-                height="80"
-                width="80"
-                radius="9"
-                color="black"
-                ariaLabel="loading"
-              />
-            </div>
-          ) : (
-            <ImageGallery images={images} openModal={openModal} />
-          )}
-
-          {page < totalPages && !loading && (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <button onClick={handleLoadMore}>Load more</button>
-            </div>
-          )}
-
-          {loading && page > 1 && (
-            <Audio
-              height="80"
-              width="80"
-              radius="9"
-              color="green"
-              ariaLabel="loading"
-            />
-          )}
-        </>
-      )}
-
+      {query && <ImageGallery query={query} openModal={openModal} />}
       {selectedImage && (
         <ImageModal
           isOpen={isModalOpen}
           onRequestClose={closeModal}
           image={selectedImage}
+        />
+      )}
+      {loading && <Loader />}
+      {gallery.length > 0 && !loading && page < totalPages && (
+        <LoadMoreBtn onClick={() => setPage((prevPage) => prevPage + 1)} />
+      )}
+      {error && <ErrorMessage message={error} />}
+      {gallery.length === 0 && !error && query && (
+        <ErrorMessage
+          message={`No images found for "${query}". Please try a different search.`}
         />
       )}
     </>
