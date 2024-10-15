@@ -76,7 +76,9 @@ function App() {
   return (
     <>
       <SearchBar onSubmit={handleSearch} />
-      {query && <ImageGallery query={query} openModal={openModal} />}
+      {images.length > 0 && (
+        <ImageGallery images={images} openModal={openModal} />
+      )}
       {selectedImage && (
         <ImageModal
           isOpen={isModalOpen}
@@ -85,13 +87,13 @@ function App() {
         />
       )}
       {loading && <Loader />}
-      {gallery.length > 0 && !loading && page < totalPages && (
+      {images.length > 0 && !loading && page < totalPages && (
         <LoadMoreBtn onClick={() => setPage((prevPage) => prevPage + 1)} />
       )}
       {error && <ErrorMessage message={error} />}
-      {gallery.length === 0 && !error && query && (
+      {images.length === 0 && !error && images && (
         <ErrorMessage
-          message={`No images found for "${query}". Please try a different search.`}
+          message={`No images found for "${images}". Please try a different search.`}
         />
       )}
     </>
